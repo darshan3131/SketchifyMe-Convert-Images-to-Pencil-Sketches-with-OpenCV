@@ -1,83 +1,96 @@
-# SketchifyMe-Convert-Images-to-Pencil-Sketches-with-OpenCV
-SketchifyMe is a Python application that transforms your images into beautiful pencil sketches using OpenCV. This project provides a simple yet powerful tool to create artistic sketches from your photos. Perfect for both beginners and advanced users interested in image processing and computer vision.
+# SketchifyMe - Convert Images to Pencil Sketches with OpenCV ✏️
 
-# SketchifyMe: Convert Images to Pencil Sketches with OpenCV
+![Before and After](example/before-after.jpg)
 
-SketchifyMe is a Python-based application designed to transform your images into stunning pencil sketches. Utilizing the power of OpenCV, this project offers an easy-to-use solution for creating artistic renditions of your photos. Whether you're a beginner looking to learn more about image processing or an advanced user seeking a reliable tool for creating sketches, SketchifyMe has you covered.
+[![Python](https://img.shields.io/badge/Python-3.8%2B-blue?logo=python)](https://www.python.org/)
+[![OpenCV](https://img.shields.io/badge/OpenCV-4.5%2B-green?logo=opencv)](https://opencv.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
-## Features
+**SketchifyMe** is a lightweight, easy-to-use Python application that transforms any photo into a stunning **hand-drawn pencil sketch** using **OpenCV**. Ideal for digital artists, photographers, beginners learning computer vision, or anyone who loves artistic image effects.
 
-- **Simple and Intuitive**: Easily convert images to pencil sketches with minimal code.
-- **High-Quality Output**: Produces detailed and aesthetically pleasing sketches.
-- **OpenCV Powered**: Leverages the capabilities of OpenCV for image processing.
-- **Customizable**: Adjust the parameters to tweak the sketching effect to your preference.
+## ✨ Features
 
-## Installation
+- One-click conversion from photo → realistic pencil sketch
+- High-quality artistic output using the classic Dodge & Burn technique
+- Fully customizable blur and blending parameters
+- Simple, clean, and well-commented code – perfect for learning
+- No external APIs or internet required
+- Cross-platform (Windows, macOS, Linux)
 
-1. Clone the repository:
-    ```bash
-    git clone https://github.com/yourusername/SketchifyMe.git
-    cd SketchifyMe
-    ```
+## 🖼️ Example Output
 
-2. Install the required dependencies:
-    ```bash
-    pip install -r requirements.txt
-    ```
+| Original                          | Pencil Sketch                       |
+|-----------------------------------|-------------------------------------|
+| ![Original](example/original.jpg) | ![Sketch](example/sketch.jpg)       |
 
-## Usage
+> *Side-by-side comparison (collage)*  
+> ![Before and After Collage](example/before-after.jpg)
 
-1. Place your input image in the project directory.
+## 🚀 Quick Start
 
-2. Run the script:
-    ```bash
-    python img_to_sketch.py
-    ```
+### 1. Clone the Repository
+```bash
+git clone https://github.com/yourusername/SketchifyMe.git
+cd SketchifyMe
+```
 
-3. The sketched image will be saved in the specified output path.
+### 2. Install Dependencies
+```bash
+pip install opencv-python numpy
+```
 
-## Example
+### 3. Run the Sketch Converter
+```bash
+python img_to_sketch.py --input your_photo.jpg --output output/sketch.jpg
+```
 
-Here's an example of how to use SketchifyMe:
+#### Optional Command-Line Arguments
+```bash
+--input   Path to input image (required)
+--output  Path to save sketch (default: output/sketch.jpg)
+--blur    Gaussian blur kernel size (default: 21)
+--scale   Division scale factor (default: 256.0)
+```
+
+## 💻 Core Transformation (How It Works)
 
 ```python
-import cv2
-import os
+grey     = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+blurred  = cv2.GaussianBlur(grey, (21, 21), 0)
+inverted = cv2.bitwise_not(blurred)
+sketch   = cv2.divide(grey, inverted, scale=256.0)
+```
 
-def image_to_sketch(image_path, output_path):
-    # Check if the input image exists
-    if not os.path.exists(image_path):
-        print(f"Error: The file '{image_path}' does not exist.")
-        return
+This classic technique blends a blurred inverted grayscale image with the original grayscale to simulate pencil shading.
 
-    img = cv2.imread(image_path)
-    if img is None:
-        print("Error: Could not open or find the image.")
-        return
+## 📁 Project Structure
 
-    # Converting to gray scale
-    gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+```
+SketchifyMe/
+├── img_to_sketch.py          # Main script (with argparse support)
+├── example/
+│   ├── original.jpg
+│   ├── sketch.jpg
+│   └── before-after.jpg      # Optional collage
+├── output/                   # Generated sketches are saved here
+├── requirements.txt
+└── README.md
+```
 
-    # Applying Gaussian blur
-    blurred_img = cv2.GaussianBlur(gray_img, (21, 21), 0)
-    inverted_blurred_img = cv2.bitwise_not(blurred_img)
-    sketch_img = cv2.divide(gray_img, inverted_blurred_img, scale=256.0)
+## 🤝 Contributing
 
-    # Ensure the directory exists
-    output_dir = os.path.dirname(output_path)
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
+Contributions, issues, and feature requests are welcome! Feel free to:
+- Report bugs or suggest enhancements
+- Submit pull requests (e.g., GUI version, batch processing, additional filters)
 
-    # Save the results
-    success = cv2.imwrite(output_path, sketch_img)
-    if success:
-        print(f"Saved the sketch at {output_path}")
-    else:
-        print(f"Error: Could not write the image to {output_path}")
+## ⭐ Show Your Support
 
-    return output_path
+If this project was useful to you, please give it a star ⭐ — it motivates further development!
 
-if __name__ == "__main__":
-    input_image_path = "/path/to/your/input_image.png"
-    output_image_path = "/path/to/save/sketch_image.png"
-    image_to_sketch(input_image_path, output_image_path)
+## 📄 License
+
+Released under the **MIT License** – see the [LICENSE](LICENSE) file for details.
+
+---
+Transform your photos into art with just one command. Enjoy sketching! ✏️
